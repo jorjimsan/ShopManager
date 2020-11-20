@@ -4,5 +4,4 @@ Librer�a shopManager para facilitar el desarrollo de aplicaciones de tienda vi
 Usa gradle para controlar la construcci�n y dependencias
 Usa el sistema de trazado de java
 Usa hazelcast para tener datos en memoria compartida del stock y de los pedidos
-
 Esta librer�a podr� ser usada tanto por aplicaciones cliente como servidor en el proceso de venta on-line
