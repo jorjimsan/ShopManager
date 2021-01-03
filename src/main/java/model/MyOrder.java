@@ -4,30 +4,44 @@
 package model;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * @author Isabel Román
  */
 public class MyOrder implements Order {
 
+	
+	/**
+	 * Objeto tipo logger para gestionar los mensajes durante la ejecución
+	 */
+	private static Logger trazador=Logger.getLogger(MyProduct.class.getName());	
+	/**
+	 * Identificador del producto
+	 */
+	private String id;
+	
+	
 	/**
 	 * 
 	 */
 	public MyOrder() {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void setId(String id) {
-		// TODO Auto-generated method stub
-
+		String msg="Estableciendo id a "+id;
+    	trazador.info(msg);
+        this.id=id;
 	}
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+    	String msg="Devolviendo el id como "+id;
+    	trazador.info(msg);
+    	return this.id;
 	}
 
 	@Override
