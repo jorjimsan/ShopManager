@@ -6,6 +6,7 @@ package shopmanager;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -14,11 +15,9 @@ import java.util.logging.Logger;
 import exceptions.NoEnoughStock;
 import exceptions.NotInStock;
 import exceptions.UnknownRepo;
-import model.MyOrder;
 import model.Order;
 import model.Product;
 import persistency.OrderRepository;
-import shopmanager.StockManager;
 /**
  * @author Isabel Román
  *
@@ -37,10 +36,11 @@ public class MyBagManager implements BagManager {
 		cesta=new HashMap<String,Product>();
 	}
 
-	public MyBagManager(OrderRepository repo,StockManager stockManager){
+	public MyBagManager(OrderRepository repo,StockManager stockManager,Order orderManager){
 		cesta=new HashMap<String,Product>();
 		repositorio=repo;
 		stock=stockManager;
+		order=orderManager;
 	}
 
 
@@ -104,12 +104,30 @@ public class MyBagManager implements BagManager {
 	public Order order() {
 		// No crea el objeto order, aún no está resuelto quién será el responsable de elegir el tipo concreto
 		try{ 	       
+		   
+		   // Persisto el stock
 		   trazador.info("Intento persistir el stock");
 	       stock.save();	
+	       
+	       // Actualizo pedido
 	       trazador.info("Actualizo el pedido");
 	       order.setProducts(cesta.values());	
+	       
+	       // Crep ID Univoco
+	       trazador.info("Creo ID Univoco");
+	       // Creo UUID unico
+	       UUID id = UUID.randomUUID();
+	       // Asigno el UUID al objeto order
+	       order.setId(String.valueOf(id));		
+	       
+	       // Persisto el pedido
 	       trazador.info("Persisto el pedido");
 	       repositorio.save(order);
+	       
+	       // Borro la cesta
+	       trazador.info("Borro la cesta");
+	       cesta.clear();
+	       
 	    
 		} catch (UnknownRepo ex) {
 			trazador.info("No ha sido posible guardar el pedido, no se estableció el repositorio en el stock");
