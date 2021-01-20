@@ -15,11 +15,12 @@ import java.util.logging.Logger;
 import exceptions.NoEnoughStock;
 import exceptions.NotInStock;
 import exceptions.UnknownRepo;
+import model.MyOrder;
 import model.Order;
 import model.Product;
 import persistency.OrderRepository;
 /**
- * @author Isabel Román
+ * @author Isabel Román, Jorge Jiménez-Sánchez
  *
  */
 public class MyBagManager implements BagManager {
@@ -36,11 +37,10 @@ public class MyBagManager implements BagManager {
 		cesta=new HashMap<String,Product>();
 	}
 
-	public MyBagManager(OrderRepository repo,StockManager stockManager,Order orderManager){
+	public MyBagManager(OrderRepository repo,StockManager stockManager){
 		cesta=new HashMap<String,Product>();
 		repositorio=repo;
 		stock=stockManager;
-		order=orderManager;
 	}
 
 
@@ -102,9 +102,13 @@ public class MyBagManager implements BagManager {
 	
 	@Override
 	public Order order() {
-		// No crea el objeto order, aún no está resuelto quién será el responsable de elegir el tipo concreto
+		
 		try{ 	       
 		   
+		   // Creamos el objeto
+		   trazador.info("Creo Objeto de la clase MyOrder");
+		   order=new MyOrder();
+			
 		   // Persisto el stock
 		   trazador.info("Intento persistir el stock");
 	       stock.save();	
@@ -113,11 +117,12 @@ public class MyBagManager implements BagManager {
 	       trazador.info("Actualizo el pedido");
 	       order.setProducts(cesta.values());	
 	       
-	       // Crep ID Univoco
+	       // Creo ID Univoco
 	       trazador.info("Creo ID Univoco");
-	       // Creo UUID unico
 	       UUID id = UUID.randomUUID();
-	       // Asigno el UUID al objeto order
+	       
+	       // Asigno el UUID al objeto creado
+	       trazador.info("Asigno ID Univoco");
 	       order.setId(String.valueOf(id));		
 	       
 	       // Persisto el pedido
