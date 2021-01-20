@@ -4,12 +4,11 @@
 package model;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
 /**
- * @author Isabel Román
+ * @author Isabel Román, Jorge Jiménez-Sánchez
  */
 public class MyOrder implements Order {
 
