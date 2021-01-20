@@ -33,7 +33,7 @@ class BagManagerTestOrder {
 	private static Logger trazador=Logger.getLogger(ProductTest.class.getName());
 
 	//Creo los objetos sustitutos (representantes o mocks)
-	//Son objetos contenidos en MyBagManager de los que aÃ¯Â¿Â½n no disponemos el cÃ¯Â¿Â½digo
+	//Son objetos contenidos en MyBagManager de los que a�n no disponemos el c�digo
 	@Mock(serializable = true)
 	private static Product producto1Mock= Mockito.mock(Product.class);
 	@Mock(serializable = true)
@@ -45,8 +45,8 @@ class BagManagerTestOrder {
 	@Mock
 	private static Order orderMock=Mockito.mock(Order.class);
 	
-	//InyecciÃ¯Â¿Â½n de dependencias
-	//Los objetos contenidos en micestaTesteada son reemplazados automÃ¯Â¿Â½ticamente por los sustitutos (mocks)
+	//Inyecci�n de dependencias
+	//Los objetos contenidos en micestaTesteada son reemplazados autom�ticamente por los sustitutos (mocks)
 	@InjectMocks
 	private static MyBagManager micestaTesteada;
 	
@@ -70,56 +70,51 @@ class BagManagerTestOrder {
 		// Comienzo del Test
 		trazador.info("Comienza el test de order");
 		
-		//Hago un pedido que no debe tener problemas
-		trazador.info("Primero sin problemas");
-				
-		//El procedimiento rellenaCesta mete dos productos (mocks) en la cesta
+		// El procedimiento rellenaCesta mete dos productos (mocks) en la cesta
 		rellenaCesta();
 
-		// Comportamiento Mocks
-		Mockito.when(micestaTesteada.order().getId()).thenReturn("UUID1");
-		
-		//Si no hay problema se guarda
+		// Invoco al m�todo order (esto crear� un objeto de tipo order, por tanto no es puramente un test unitario)
 		micestaTesteada.order();
 		
-		// Obtiene el id univoco del primer pedido
+		// Obtiene el id un�voco del primer pedido
 		String idPedido1 = micestaTesteada.order().getId();
+		
+		// VERIFICAMOS QUE EL ID DEVUELTO DEL PRIMER PEDIDO NO ES NULL
+		
+		// Comprobamos que el string devuelto no es null
+		assertNotNull(idPedido1,"El ID devuelto es Null");
 		
 		// VERIFICA QUE SE BORRA LA CESTA AL EFECTUAR EL PEDIDO CON ORDER:
 		
-		//Tras ejecutar order() la cesta no debe contener ninguno de los productos "id1" e "id2" que 
-		//se aÃ±adieron en rellenaCesta() para efectuar el pedido
-		assertTrue(micestaTesteada.findProduct("id1").isEmpty());
-		assertTrue(micestaTesteada.findProduct("id2").isEmpty());
+		// Tras ejecutar order() la cesta no debe contener ninguno de los productos "id1" e "id2" que 
+		// se a�adieron en rellenaCesta() para efectuar el pedido
+		assertTrue(micestaTesteada.findProduct("id1").isEmpty(),"La cesta contiene un producto con id1 que se ha eliminado");
+		assertTrue(micestaTesteada.findProduct("id2").isEmpty(),"La cesta contiene un producto con id2 que se ha eliminado");
 
-		
-		// NUEVO PEDIDO PARA PROBAR QUE SE GESTIONA UN ID UNÃ�VOCO PARA CADA PEDIDO, LLENAMOS LA CESTA
+		// NUEVO PEDIDO PARA PROBAR QUE SE GESTIONA UN ID UNIVOCO PARA CADA PEDIDO, LLENAMOS LA CESTA
 
 		// Vaciamos la cesta antes del nuevo pedido
 		micestaTesteada.reset();
 		
-		//Hago otro pedido que no debe tener problemas
-		trazador.info("Primero sin problemas");
-				
-		//El procedimiento rellenaCesta mete dos productos (mocks) en la cesta
+		// El procedimiento rellenaCesta mete dos productos (mocks) en la cesta
 		rellenaCesta();
 
-		// Comportamiento Mocks
-		Mockito.when(micestaTesteada.order().getId()).thenReturn("UUID2");
-		
-		//Si no hay problema se guarda
+		// Invoco al m�todo order (esto crear� un objeto de tipo order, por tanto no es puramente un test unitario)
 		micestaTesteada.order();
 
-		// Obtiene el id unÃ­voco del primer pedido
+		// Obtiene el id univoco del segundo pedido
 		String idPedido2 = micestaTesteada.order().getId();
+		
+		// VERIFICAMOS QUE EL ID DEVUELTO DEL PRIMER PEDIDO NO ES NULL
+		// Comprobamos que el string devuelto no es null
+		assertNotNull(idPedido2,"El ID devuelto es Null");
 		
 		// VERIFICA QUE SE BORRA LA CESTA AL EFECTUAR EL PEDIDO CON ORDER:
 		
-		//Tras ejecutar order() la cesta no debe contener ninguno de los productos "id1" e "id2" que 
-		//se aÃ±adieron en rellenaCesta() para efectuar el pedido
-		assertTrue(micestaTesteada.findProduct("id1").isEmpty());
-		assertTrue(micestaTesteada.findProduct("id2").isEmpty());
-
+		// Tras ejecutar order() la cesta no debe contener ninguno de los productos "id1" e "id2" que 
+		// se a�adieron en rellenaCesta() para efectuar el pedido
+		assertTrue(micestaTesteada.findProduct("id1").isEmpty(),"La cesta contiene un producto con id1 que se ha eliminado");
+		assertTrue(micestaTesteada.findProduct("id2").isEmpty(),"La cesta contiene un producto con id2 que se ha eliminado");
 		
 		// COMPARAMOS QUE LOS ID DE LOS DIFERENTES PEDIDOS NO SON IGUALES
 		assertNotEquals(idPedido1, idPedido2, "No asigna id univoco a cada pedido");
